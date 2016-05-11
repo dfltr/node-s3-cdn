@@ -1,26 +1,26 @@
 'use strict';
 
 var gulp = require('gulp');
-var S3CDN = require('./index.js');
+var S3CDN = require('../index.js');
 
 gulp.task('cdn:upload', (done) => {
   var cdn = new S3CDN({
-    accessKeyId: 'somekey',
-    secretAccessKey: 'somesecret',
-    bucket: 'somebucket'
+    accessKeyId: 'key',
+    secretAccessKey: 'secret',
+    bucket: 'bucket',
+    hashFile: __dirname + '/cdn-hash.json'
   });
 
-  cdn.upload('./test/dummy-data');
+  cdn.upload('./dummy-data', done);
 });
 
 gulp.task('cdn:clean', (done) => {
   var cdn = new S3CDN({
-    accessKeyId: 'somekey',
-    secretAccessKey: 'somesecret',
-    bucket: 'somebucket'
+    accessKeyId: 'key',
+    secretAccessKey: 'secret',
+    bucket: 'bucket',
+    hashFile: __dirname + '/cdn-hash.json'
   });
 
-  cdn.clean(() => {
-    console.log('callback');
-  });
+  cdn.clean(done);
 });

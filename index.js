@@ -12,7 +12,7 @@ var cdn = function(options) {
   this.secretAccessKey = options.secretAccessKey;
   this.bucket = options.bucket;
   this.ignore = options.ignore || [];
-  this.hashFile = options.hashFile || './cdn-hash.json';
+  this.hashFile = options.hashFile || (__dirname + '/cdn-hash.json');
 
   this.client = s3.createClient({
     s3Options: {
