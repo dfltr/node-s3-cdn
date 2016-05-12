@@ -1,6 +1,6 @@
 {
   "name": "node-s3-cdn",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Node.js module for versioning and uploading your assets to S3.",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,11 @@
   "dependencies": {
     "crypto-js": "^3.1.6",
     "fs-extra": "^0.30.0",
+    "node-sass": "^3.7.0",
     "progress": "^1.1.8",
     "s3": "^4.4.0"
+  },
+  "devDependencies": {
+    "gulp-sass": "^2.3.1"
   }
 }

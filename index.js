@@ -1,11 +1,12 @@
 var fs = require('fs-extra');
 var ProgressBar = require('progress');
 var s3 = require('s3');
+var sass = require('node-sass');
 var sha1 = require('crypto-js/sha1');
 
 var cdn = function(options) {
-  if(!options || !options.accessKeyId || !options.secretAccessKey || !options.bucket) {
-    throw 'S3 accessKeyId, secretAccessKey, and bucket must be set in options'
+  if(!options || !options.accessKeyId || !options.secretAccessKey || !options.bucket || !options.cdnUrl) {
+    throw 'S3 accessKeyId, secretAccessKey, bucket, and cdnUrl must be set in options'
   }
 
   this.accessKeyId = options.accessKeyId;
@@ -13,6 +14,7 @@ var cdn = function(options) {
   this.bucket = options.bucket;
   this.ignore = options.ignore || [];
   this.hashFile = options.hashFile || (__dirname + '/cdn-hash.json');
+  this.cdnUrl = options.cdnUrl;
 
   this.client = s3.createClient({
     s3Options: {
@@ -28,6 +30,8 @@ cdn.prototype.upload = function(assetDir, callback = () => {}) {
   }
 
   var hash = sha1('SterlingMalloryArcher' + Math.random()).toString().substring(0, 7);
+
+  //TODO: tmpDir never gets removed if anything fails before the cleanup phase
   var tmpDir = `/tmp/${hash}`;
 
   console.log(`Copying ${assetDir} to ${tmpDir}`);
@@ -143,6 +147,43 @@ cdn.prototype.clean = function(callback = () => {}) {
       console.log('ERROR: ', err);
     });
   });
+}
+
+cdn.prototype.getHash = function() {
+  var result = false;
+
+  try {
+    var stat = fs.statSync(this.hashFile);
+
+    if(stat.isFile()) {
+      let hashFile = require(this.hashFile);
+
+      if(hashFile.hash) {
+        result = hashFile.hash;
+      }
+    }
+  } catch(noHashFile) {}
+
+  return result;
+}
+
+cdn.prototype.getUrl = function(path) {
+  var hash = this.getHash();
+  var result;
+
+  if(hash && process.env.NODE_ENV === 'production') {
+    result = `url('${this.cdnUrl}/${hash}${path}')`;
+  } else {
+    result = path;
+  }
+
+  return path;
+}
+
+cdn.prototype.helpers = {
+  sass: function(path) {
+    return sass.types.String(`url('${this.getUrl(path.getValue())}')`);
+  }
 }
 
 module.exports = cdn;
