@@ -1,13 +1,17 @@
 'use strict';
 
+//Set your s3 keypair and bucket here for testing, it's in .gitignore for convenience
+var credentials = require('./s3.json');
+
 var gulp = require('gulp');
 var gulpSass = require('gulp-sass');
+var Handlebars = require('handlebars');
 var S3CDN = require('../index.js');
 
 var cdn = new S3CDN({
-  accessKeyId: 'key',
-  secretAccessKey: 'secret',
-  bucket: 'bucket',
+  accessKeyId: credentials.accessKeyId,
+  secretAccessKey: credentials.secretAccessKey,
+  bucket: credentials.bucket,
   hashFile: __dirname + '/cdn-hash.json',
   cdnUrl: 'https://media.giphy.com'
 });
@@ -32,4 +36,16 @@ gulp.task('sass', (done) => {
     .on('end', function() {
       done();
     });
+});
+
+gulp.task('handlebars', (done) => {
+  Handlebars.registerHelper('cdn', function(path) {
+    return cdn.getUrl.call(cdn, path);
+  });
+
+  var tpl = Handlebars.compile("<img src=\"{{cdn '/cant/tell/me/nothin.gif'}}\" />");
+
+  console.log('Handlebars: ', tpl());
+
+  done();
 });

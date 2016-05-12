@@ -1,2 +1,3 @@
 node_modules/
 test/cdn-hash.json
+test/s3.json

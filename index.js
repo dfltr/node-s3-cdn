@@ -172,12 +172,12 @@ cdn.prototype.getUrl = function(path) {
   var result;
 
   if(hash && process.env.NODE_ENV === 'production') {
-    result = `url('${this.cdnUrl}/${hash}${path}')`;
+    result = `${this.cdnUrl}/${hash}${path}`;
   } else {
     result = path;
   }
 
-  return path;
+  return result;
 }
 
 cdn.prototype.helpers = {
