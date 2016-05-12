@@ -2,6 +2,10 @@
 
 A simple Node.js library for versioning and uploading your assets to S3, then pointing to those assets in your views, stylesheets, and scripts.
 
+For the TL;DR version see [/test/gulpfile.js](https://github.com/dfltr/node-s3-cdn/blob/master/test/gulpfile.js)
+
+Express, Gulp, Handlebars, and Sass are used throughout, but helpers and examples for other libs are more than welcome.
+
 ##Configuration
 
 Instantiate the cdn with your s3 credentials and config options.
