@@ -15,6 +15,7 @@ var cdn = function(options) {
   this.ignore = options.ignore || [];
   this.hashFile = options.hashFile || (__dirname + '/cdn-hash.json');
   this.cdnUrl = options.cdnUrl;
+  this.envList = options.envList || ['production'];
 
   this.client = s3.createClient({
     s3Options: {
@@ -171,7 +172,7 @@ cdn.prototype.getUrl = function(path) {
   var hash = this.getHash();
   var result;
 
-  if(hash && process.env.NODE_ENV === 'production') {
+  if(hash && this.envList.indexOf(process.env.NODE_ENV) > -1) {
     result = `${this.cdnUrl}/${hash}${path}`;
   } else {
     result = path;

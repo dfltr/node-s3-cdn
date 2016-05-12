@@ -13,7 +13,8 @@ var cdn = new S3CDN({
   secretAccessKey: credentials.secretAccessKey,
   bucket: credentials.bucket,
   hashFile: __dirname + '/cdn-hash.json',
-  cdnUrl: 'https://media.giphy.com'
+  cdnUrl: 'https://media.giphy.com',
+  envList: ['production', 'azeroth']
 });
 
 gulp.task('cdn:upload', (done) => {
