@@ -1,6 +1,6 @@
 {
   "name": "node-s3-cdn",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "Node.js module for versioning and uploading your assets to S3.",
   "main": "index.js",
   "scripts": {
