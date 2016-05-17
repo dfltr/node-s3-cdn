@@ -30,7 +30,8 @@ cdn.prototype.upload = function(assetDir, callback = () => {}) {
     throw 'upload() requires param assetDir';
   }
 
-  var hash = sha1('SterlingMalloryArcher' + Math.random()).toString().substring(0, 7);
+  //Get existing hash or set a new one if it doesn't exist
+  var hash = this.getHash() || this.setHash();
 
   //TODO: tmpDir never gets removed if anything fails before the cleanup phase
   var tmpDir = `/tmp/${hash}`;
@@ -79,6 +80,7 @@ cdn.prototype.upload = function(assetDir, callback = () => {}) {
       }).on('progress', () => {
         if(uploader.progressAmount > 0) {
           if(!bar) {
+            //TODO: uploader.progressTotal sometimes changes the units it reports
             bar = new ProgressBar('Uploading ' + Math.round(uploader.progressTotal / 1024) + 'MB to S3 (' + this.bucket + ') - [:bar] :percent, ETA :etas', {
               complete: '=',
               incomplete: ' ',
@@ -166,6 +168,16 @@ cdn.prototype.getHash = function() {
   } catch(noHashFile) {}
 
   return result;
+}
+
+cdn.prototype.generateHash = function() {
+  return sha1('SterlingMalloryArcher' + Math.random()).toString().substring(0, 7);
+}
+
+cdn.prototype.setHash = function(hash = this.generateHash()) {
+  fs.writeJsonSync(this.hashFile, { hash: hash });
+
+  return hash;
 }
 
 cdn.prototype.getUrl = function(path) {

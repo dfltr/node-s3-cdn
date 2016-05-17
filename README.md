@@ -114,6 +114,20 @@ Remember when you set `hashFile: __dirname + '/your_asset_version_hash_will_be_s
 
 From there you can configure Cloudfront to point to your S3 bucket and serve assets from `https://your.cdn.domain.com`.
 
+##Versioning assets
+
+To create a new version of your assets, run:
+
+<pre>
+//Auto-generate a hash
+cdn.setVersion();
+
+//Set your own manually
+cdn.setVersion('1.8.7');
+</pre>
+
+You can run `cdn.upload` as many times as you want on the same version, only changed files will be overwritten.
+
 ##Cleaning up previous versions
 
 **IMPORTANT CAVEAT:** `cdn.clean` will delete every other tag in your s3 bucket except the current asset version.

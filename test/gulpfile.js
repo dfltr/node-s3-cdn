@@ -25,6 +25,10 @@ gulp.task('cdn:clean', (done) => {
   cdn.clean(done);
 });
 
+gulp.task('cdn:version', (done) => {
+  cdn.setHash();
+});
+
 gulp.task('sass', (done) => {
   gulp.src(__dirname + '/test.scss')
     .pipe(gulpSass({
