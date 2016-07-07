@@ -120,10 +120,10 @@ To create a new version of your assets, run:
 
 <pre>
 //Auto-generate a hash
-cdn.setVersion();
+cdn.setHash();
 
 //Set your own manually
-cdn.setVersion('1.8.7');
+cdn.setHash('AnyValidS3Name');
 </pre>
 
 You can run `cdn.upload` as many times as you want on the same version, only changed files will be overwritten.
